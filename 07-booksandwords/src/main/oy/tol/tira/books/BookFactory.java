@@ -19,7 +19,7 @@ public final class BookFactory {
      */
     public static Book createBook() {
         // the BST() is also can be used
-        // return BST();
+        // return new BST();
         return new HashTable();
     }
 }
