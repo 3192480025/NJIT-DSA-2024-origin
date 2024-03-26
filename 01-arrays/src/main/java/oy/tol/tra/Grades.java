@@ -5,7 +5,7 @@ public class Grades<T extends Comparable<T>> {
    private T[] grades = null;
 
    public Grades(T[] grades) {
-      this.grades = grades.clone();
+      this.grades = grades;
    }
 
    public void reverse() {
