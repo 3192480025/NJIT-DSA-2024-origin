@@ -17,6 +17,6 @@ public class Grades<T extends Comparable<T>> {
    }
 
    public T[] getArray() {
-      return grades.clone();
+      return grades;
    }
 }
