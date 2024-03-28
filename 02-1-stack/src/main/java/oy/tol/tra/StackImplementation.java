@@ -31,6 +31,10 @@ public class StackImplementation<E> implements StackInterface<E> {
 
     @Override
     public void push(E element) throws StackAllocationException, NullPointerException {
+        if (element == null) {
+            throw new NullPointerException("Cannot push null element onto the stack.");
+        }
+
         if (currentIndex + 1 >= capacity) {
             // If the stack is full, double its capacity.
             int newCapacity = capacity * 2;
@@ -46,10 +50,6 @@ public class StackImplementation<E> implements StackInterface<E> {
             }
         }
 
-        if (element == null) {
-            throw new NullPointerException("Cannot push null element onto the stack.");
-        }
-
         currentIndex++;
         itemArray[currentIndex] = element;
     }
@@ -62,8 +62,8 @@ public class StackImplementation<E> implements StackInterface<E> {
         }
 
         E poppedElement = (E) itemArray[currentIndex];
+        itemArray[currentIndex] = null;
         currentIndex--;
-
         return poppedElement;
     }
 
