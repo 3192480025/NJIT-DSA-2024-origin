@@ -95,6 +95,8 @@ public class QueueImplementation<E> implements QueueInterface<E> {
 
     @Override
     public void clear() {
+        Object[] tmp = new Object[capacity];
+        itemArray = tmp;
         front = 0;
         rear = -1;
         size = 0;
