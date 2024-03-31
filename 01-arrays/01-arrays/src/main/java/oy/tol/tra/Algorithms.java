@@ -3,8 +3,8 @@ package oy.tol.tra;
 public class Algorithms {
     public static <T extends Comparable<T>> void sort(T[] array) {
         int n = array.length;
-        boolean swapped;
-
+        boolean swapped; 
+        
         do {
             swapped = false;
             for (int i = 1; i < n; i++) {
