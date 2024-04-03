@@ -35,35 +35,32 @@ public class QueueImplementation<E> implements QueueInterface<E> {
 
     @Override
     public void enqueue(E element) throws QueueAllocationException, NullPointerException {
-        if (size() >= capacity) {
-            reallocateQueueMemory();
-        }
-
         if (element == null) {
             throw new NullPointerException("Cannot enqueue null element.");
+        }
+
+        if (size() >= capacity) {
+            // If the queue is full, double its capacity.
+            int newCapacity = capacity * 2;
+            try {
+                Object[] newArray = new Object[newCapacity];
+                int currentSize = size();
+                for (int i = 0; i < currentSize; i++) {
+                    newArray[i] = itemArray[(front + i) % capacity];
+                }
+                itemArray = newArray;
+                capacity = newCapacity;
+                front = 0;
+                rear = currentSize - 1;
+
+            } catch (Exception e) {
+                throw new QueueAllocationException("Failed to reallocate queue memory.");
+            }
         }
 
         rear = (rear + 1) % capacity;
         itemArray[rear] = element;
         size++;
-    }
-
-    private void reallocateQueueMemory() throws QueueAllocationException {
-        int newCapacity = capacity * 2;
-        try {
-            Object[] newArray = new Object[newCapacity];
-            int currentSize = size();
-            for (int i = 0; i < currentSize; i++) {
-                newArray[i] = itemArray[(front + i) % capacity];
-            }
-            itemArray = newArray;
-            capacity = newCapacity;
-            front = 0;
-            rear = currentSize - 1;
-
-        } catch (Exception e) {
-            throw new QueueAllocationException("Failed to reallocate queue memory.");
-        }
     }
 
     @SuppressWarnings("unchecked")
@@ -74,6 +71,7 @@ public class QueueImplementation<E> implements QueueInterface<E> {
         }
 
         E dequeuedElement = (E) itemArray[front];
+        itemArray[front] = null;
         front = (front + 1) % capacity;
         size--;
 
@@ -97,6 +95,8 @@ public class QueueImplementation<E> implements QueueInterface<E> {
 
     @Override
     public void clear() {
+        Object[] tmp = new Object[capacity];
+        itemArray = tmp;
         front = 0;
         rear = -1;
         size = 0;
@@ -113,7 +113,7 @@ public class QueueImplementation<E> implements QueueInterface<E> {
         if (!isEmpty()) {
             int index = front;
             do {
-                builder.append(itemArray[index]);
+                builder.append(itemArray[index].toString());
                 if (index != rear) {
                     builder.append(", ");
                 }
