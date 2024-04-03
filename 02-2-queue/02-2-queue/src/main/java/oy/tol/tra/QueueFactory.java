@@ -1,8 +1,7 @@
 package oy.tol.tra;
 
 /**
- * This class provides methods to create instances of the queue implementing the
- * {@code QueueInterface}.
+ * This class instantiates a queue implementing the {@code QueueInterface}.
  * 
  * @author Antti Juustila
  */
@@ -12,23 +11,26 @@ public class QueueFactory {
    }
 
    /**
-    * Creates an instance of QueueInterface for Integer type with the specified
-    * capacity.
-    * 
+    * Creates an instance of QueueInterface for Integer type.
     * @param capacity Number of elements the queue can hold.
     * @return The queue object.
     */
    public static QueueInterface<Integer> createIntegerQueue(int capacity) {
+      // - Instantiates your queue implementation using Integer as a template parameter, 
+      //   with the given capacity,
+      // - and return the object to the caller.
       return new QueueImplementation<>(capacity);
    }
 
    /**
-    * Creates an instance of QueueInterface for Integer type using the default
-    * capacity.
-    * 
+    * Creates an instance of QueueInterface for Integer type.
+    * Use the default constructor of the queue.
     * @return The queue object.
     */
    public static QueueInterface<Integer> createIntegerQueue() {
+      // - Instantiates your queue implementation using Integer as a template parameter, 
+      //   with default capacity,
+      // - and return the object to the caller.
       return new QueueImplementation<>();
    }
 }
