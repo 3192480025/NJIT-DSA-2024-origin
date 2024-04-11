@@ -4,24 +4,66 @@ import java.util.function.Predicate;
 
 public class Algorithms {
     public static <T extends Comparable<T>> void sort(T[] array) {
-        int n = array.length;
-        boolean swapped;
+        mergeSort(array, 0, array.length - 1);
+    }
+
+    private static <T extends Comparable<T>> void mergeSort(T[] array, int left, int right) {
+        if (left < right) {
+            int mid = left + (right - left) / 2;
+            mergeSort(array, left, mid);
+            mergeSort(array, mid + 1, right);
+            merge(array, left, mid, right);
+        }
+    }
+
+    private static <T extends Comparable<T>> void merge(T[] array, int left, int mid, int right) {
+        int n1 = mid - left + 1;
+        int n2 = right - mid;
+
+       
+        T[] leftArray = (T[]) new Comparable[n1];
+        T[] rightArray = (T[]) new Comparable[n2];
+
         
-        do {
-            swapped = false;
-            for (int i = 1; i < n; i++) {
-                if (array[i - 1].compareTo(array[i]) > 0) {
-                    // Swap elements if they are in the wrong order
-                    T temp = array[i - 1];
-                    array[i - 1] = array[i];
-                    array[i] = temp;
-                    swapped = true;
-                }
+        for (int i = 0; i < n1; i++) {
+            leftArray[i] = array[left + i];
+        }
+        for (int j = 0; j < n2; j++) {
+            rightArray[j] = array[mid + 1 + j];
+        }
+
+     
+        int i = 0, j = 0;
+        int k = left;
+        while (i < n1 && j < n2) {
+            if (leftArray[i].compareTo(rightArray[j]) <= 0) {
+                array[k] = leftArray[i];
+                i++;
+            } else {
+                array[k] = rightArray[j];
+                j++;
             }
-        } while (swapped);
+            k++;
+        }
+
+       
+        while (i < n1) {
+            array[k] = leftArray[i];
+            i++;
+            k++;
+        }
+        while (j < n2) {
+            array[k] = rightArray[j];
+            j++;
+            k++;
+        }
     }
 
     public static <T> void reverse(T[] array) {
+        if (array == null || array.length <= 1) {
+            return; 
+        }
+
         int left = 0;
         int right = array.length - 1;
 
@@ -34,28 +76,33 @@ public class Algorithms {
             right--;
         }
     }
+
     public static <T extends Comparable<T>> int binarySearch(T value, T[] array, int fromIndex, int toIndex) {
-        if (fromIndex <= toIndex) {
+        if (array == null || fromIndex < 0 || toIndex >= array.length || fromIndex > toIndex) {
+            throw new IllegalArgumentException("参数无效");
+        }
+
+        while (fromIndex <= toIndex) {
             int mid = fromIndex + (toIndex - fromIndex) / 2;
             int comparisonResult = value.compareTo(array[mid]);
-    
+
             if (comparisonResult == 0) {
-                return mid; // Finding a match
+                return mid; 
             } else if (comparisonResult < 0) {
-                return binarySearch(value, array, fromIndex, mid - 1); // continue to search on the left 
+                toIndex = mid - 1; 
             } else {
-                return binarySearch(value, array, mid + 1, toIndex); // continue to search on the right
+                fromIndex = mid + 1; 
             }
         }
-    
-        return -1; // no match
+
+        return -1; 
     }
-    
+
     public static <E extends Comparable<E>> void fastSort(E[] array) {
         quickSort(array, 0, array.length - 1);
     }
 
-    public static <E extends Comparable<E>> void quickSort(E[] array, int begin, int end) {
+    private static <E extends Comparable<E>> void quickSort(E[] array, int begin, int end) {
         if (begin < end) {
             int partitionIndex = partition(array, begin, end);
             quickSort(array, begin, partitionIndex - 1);
@@ -82,6 +129,7 @@ public class Algorithms {
 
         return i + 1;
     }
+
     public static <K extends Comparable<K>, V> int partitionByRule(Pair<K, V>[] pairs, int count, Predicate judgeNullPredicate) {
         if (pairs == null || count <= 0) {
             return 0;
